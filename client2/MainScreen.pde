@@ -153,6 +153,7 @@ class MainScreen extends Screen {
       }
       if (me.NextAction != null) {
         // アクションが確定している場合
+        //boolean SubmitData(String GameNo, String ContentType, String Body, Client client){
         SubmitData(GameNo, "ActionCommand", me.NextAction.getName(), client);
       }
     }

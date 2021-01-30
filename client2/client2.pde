@@ -16,9 +16,9 @@ Client client;
 String GameNo;
 enum Status {
   GAME_START, 
-    INPUT_ACTION, 
-    MATCHING, 
-    RESULT, 
+    INPUT_ACTION,
+    MATCHING,
+    RESULT,
     GAME_FINISH
 }
 PFont Japanfont, Englishfont;
@@ -29,6 +29,7 @@ void setup() {
   me.setenemy(enemy);
   enemy.setenemy(me);
   Gameflow.setScreen(new start());
+  client = new Client(this, "127.0.0.1", 5204);
 }
 void draw() {
   background(255);
@@ -40,21 +41,23 @@ void clientEvent(Client client) {
   // 状態によって場合分け
   // void draw内でやってもまあいいかな
   // 予想されるContent-typeを受け取り、読み取った文字列を返す関数。
+  //String ReadData(String ExpectContentType, Client client
 
   switch(CurrentStatus) {
-  case GAME_START:
-    // GAME_START中に何かを受け取ることはない。
-  case MATCHING :
-    if (ReadData("MatchingComplete", client).compareTo("Done\n") == 0) {
-      CurrentStatus = Status.INPUT_ACTION;
-    }
-  case INPUT_ACTION:
-    String result = ReadData("Result", client);
-    updateState(result);
-  case RESULT:
-    // いらないかも。相手の起こした行動、ダメージ、相手のライフポイントさえあれば描画できそう。
-    //enemy.NextAction = new ActionCommand();
-  case GAME_FINISH:
+    case GAME_START:
+      
+    case MATCHING :
+      if (ReadData("MatchingComplete", client).compareTo("Done\n") == 0) {
+        CurrentStatus = Status.INPUT_ACTION;
+        println(CurrentStatus);
+      }
+    case INPUT_ACTION:
+      // INPUT_ACTION中に何かを受け取ることはない。
+    case RESULT:
+      // 相手のアクションによって、相手の値を適切に設定する。
+      // いらないかも。相手の起こした行動、ダメージ、相手のライフポイントさえあれば描画できそう。
+      //enemy.NextAction = new ActionCommand();
+    case GAME_FINISH:
   }
 }
 void serverEvent (Client client) {
@@ -65,10 +68,6 @@ void disconnectEvent(Client client) {
   // コネクションが切断されたときに呼ばれる。
   println("disconnect with server");
 }
-void connectServer() {
+void connectServer(){
   client = new Client(this, "127.0.0.1", 5204);
-}
-void updateState(String result){
-  // 自分のHP, 相手のHP, 相手の行動, 自分の行動、自分のRandomの値、相手のRandomの値
-  String [] data = split(result.trim(), ",");
 }

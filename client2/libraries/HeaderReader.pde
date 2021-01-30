@@ -1,3 +1,4 @@
+import processing.net.*;
 import java.util.Iterator;
 class HeaderReader implements Iterable<String>, Iterator<String> {
   Client client;

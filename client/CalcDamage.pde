@@ -2,17 +2,16 @@ class CalcDamage extends Screen {
   boolean calc_finished = false;
 
   void display() {
-    calc();
     DrawCharactor(100, 520);
     DrawCharactor(1100, 520);
     fill(0);
     text(str(Gameflow.turn + 1) + "ターン目", width/2, 100);
     DrawActtion1( me.NextAction.getName());
-    DrawActtion2( enemy.NextAction.getName());
+    DrawActtion2( enemyAction);
     DrawHeart(71, 50, me.lifepoint);
     DrawLifePoint(70, 100, me.lifepoint, 1);
-    DrawHeart(1130, 50, enemy.lifepoint);
-    DrawLifePoint(620, 100, enemy.lifepoint, 2);
+    DrawHeart(1130, 50, enemyLifePoint);
+    DrawLifePoint(620, 100, enemyLifePoint, 2);
     update();
   }
   //指定した位置にハートとライフを表示する
@@ -110,28 +109,21 @@ class CalcDamage extends Screen {
       delay(50);
       Gameflow.setScreen(new MainScreen());
       me.NextAction = null;
-      enemy.NextAction = null;
+      enemyAction = null;
       calc_finished = false;
       Gameflow.turn += 1;
     }
-    if ( me.lifepoint <= 0 || enemy.lifepoint <= 0) {
+    if ( me.lifepoint <= 0 || enemyLifePoint <= 0) {
       delay(50);
       me.NextAction = null;
-      enemy.NextAction = null;
+      enemyAction = null;
       Gameflow.setScreen(new Result());
     }
-    if ( me.lifepoint <= 0 || enemy.lifepoint <= 0) {
+    if ( me.lifepoint <= 0 || enemyLifePoint <= 0) {
       Gameflow.setScreen(new Result());
     } else if (Gameflow.turn >= 5) {
       delay(50);
       Gameflow.setScreen(new ResultMove());
-    }
-  }
-  void calc() {
-    if (! calc_finished) {
-      calc_finished = true;     
-      me.action();
-      enemy.action();
     }
   }
   void DrawActtion1(String action) {
@@ -149,8 +141,8 @@ class CalcDamage extends Screen {
     strokeWeight(5);
     stroke(0, 0, 0);
     textAlign( CENTER ); //中央揃え
-    //Englishfont = createFont("Arial", 70);//英語
-    //Japanfont = createFont("Meiryo", 50);//日本語
+    Englishfont = createFont("Arial", 70);//英語
+    Japanfont = createFont("Meiryo", 50);//日本語
     if (action=="AttackAction") {
       image(imgA1, x, y, z, z);
       c1=color(255, 0, 0);
@@ -185,7 +177,7 @@ class CalcDamage extends Screen {
     }
     fill(c1);
     quad(40, 620, 406, 620, 386, 780, 20, 780);
-    //textFont(Japanfont);
+    textFont(Japanfont);
     fill(255);
     text(s, 213, 720);
     fill(0);
@@ -196,9 +188,7 @@ class CalcDamage extends Screen {
     } else {
       text("1回復", 300, height /2  + 50);
     }
-
   }
-
   void DrawActtion2(String action) { 
     int x=700;
     int y=400;
@@ -213,8 +203,8 @@ class CalcDamage extends Screen {
     strokeWeight(5);
     stroke(0, 0, 0);
     textAlign( CENTER ); //中央揃え
-    //Englishfont = createFont("Arial", 70);//英語
-    //Japanfont = createFont("Meiryo", 50);//日本語
+    Englishfont = createFont("Arial", 70);//英語
+    Japanfont = createFont("Meiryo", 50);//日本語
     strokeWeight(5);
     stroke(0, 0, 0);
     if (action=="AttackAction") {
@@ -259,9 +249,9 @@ class CalcDamage extends Screen {
     
     fill(0);
     if (HealorDamage=="A") { //AならAttack系 Hなら回復　 防御の時０が返されるからその時は例外処理になってる。
-      text(enemy.NextAction.getPoint()+"ダメージ", 900, height /2  + 50);
+      text(str(enemyRandPoint) +"ダメージ", 900, height /2  + 50);
     } else if (HealorDamage=="H") {
-      text(enemy.NextAction.getPoint()+"回復", 900, height /2  + 50);
+      text(str(enemyRandPoint)+"回復", 900, height /2  + 50);
     } else {
       text("1回復", 900, height /2  + 50);
     }

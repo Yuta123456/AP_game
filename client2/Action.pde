@@ -91,7 +91,7 @@ class DrainAction extends ActionCommand {
   }
 }
 class DragonRageAction extends ActionCommand {
-  public String name = "DragonRageAction";
+  public String name = "DoragonRageAction";
   int damage = 4;
   void Action(Player player){
     player.extra = true;

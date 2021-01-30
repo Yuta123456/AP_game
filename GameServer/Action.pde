@@ -1,12 +1,8 @@
 
 abstract class ActionCommand {
-  int priority;
   String name;
   abstract void Action(Player player); // 選択したときにおこる行動を指定。
   abstract String getName();
-  int getPriority() {
-    return priority;
-  }
   abstract int getPoint();
 }
 class AttackAction extends ActionCommand {
@@ -39,7 +35,6 @@ class DeffenceAction extends ActionCommand {
 }
 class HealAction extends ActionCommand {
   int HealPoint = int(random(3)) + 3;
-  int priority = 50;
   public String name = "HealAction";
   void Action(Player player) {
     player.lifepoint += HealPoint;
@@ -91,7 +86,7 @@ class DrainAction extends ActionCommand {
   }
 }
 class DragonRageAction extends ActionCommand {
-  public String name = "DragonRageAction";
+  public String name = "DoragonRageAction";
   int damage = 4;
   void Action(Player player){
     player.extra = true;
